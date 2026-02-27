@@ -1,0 +1,444 @@
+[
+    {
+        "state": "Madhya Pradesh",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 150,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 150,
+                "rate_per_unit": 5.05
+            },
+            {
+                "min_units": 151,
+                "max_units": 300,
+                "rate_per_unit": 5.80
+            },
+            {
+                "min_units": 301,
+                "max_units": 99999,
+                "rate_per_unit": 6.70
+            }
+        ]
+    },
+    {
+        "state": "Madhya Pradesh",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 300,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 500,
+                "rate_per_unit": 7.50
+            },
+            {
+                "min_units": 501,
+                "max_units": 99999,
+                "rate_per_unit": 8.50
+            }
+        ]
+    },
+    {
+        "state": "Madhya Pradesh",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 400,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 6.90
+            }
+        ]
+    },
+    {
+        "state": "Maharashtra",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 130,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 100,
+                "rate_per_unit": 3.46
+            },
+            {
+                "min_units": 101,
+                "max_units": 300,
+                "rate_per_unit": 7.04
+            },
+            {
+                "min_units": 301,
+                "max_units": 500,
+                "rate_per_unit": 10.27
+            },
+            {
+                "min_units": 501,
+                "max_units": 99999,
+                "rate_per_unit": 11.47
+            }
+        ]
+    },
+    {
+        "state": "Maharashtra",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 350,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 10.90
+            }
+        ]
+    },
+    {
+        "state": "Maharashtra",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 500,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 9.80
+            }
+        ]
+    },
+    {
+        "state": "Gujarat",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 80,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 50,
+                "rate_per_unit": 1.95
+            },
+            {
+                "min_units": 51,
+                "max_units": 250,
+                "rate_per_unit": 3.75
+            },
+            {
+                "min_units": 251,
+                "max_units": 500,
+                "rate_per_unit": 5.25
+            },
+            {
+                "min_units": 501,
+                "max_units": 99999,
+                "rate_per_unit": 6.00
+            }
+        ]
+    },
+    {
+        "state": "Gujarat",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 250,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 8.25
+            }
+        ]
+    },
+    {
+        "state": "Gujarat",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 450,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 7.60
+            }
+        ]
+    },
+    {
+        "state": "Rajasthan",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 90,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 100,
+                "rate_per_unit": 4.75
+            },
+            {
+                "min_units": 101,
+                "max_units": 150,
+                "rate_per_unit": 5.25
+            },
+            {
+                "min_units": 151,
+                "max_units": 300,
+                "rate_per_unit": 6.00
+            },
+            {
+                "min_units": 301,
+                "max_units": 500,
+                "rate_per_unit": 6.50
+            },
+            {
+                "min_units": 501,
+                "max_units": 99999,
+                "rate_per_unit": 7.25
+            }
+        ]
+    },
+    {
+        "state": "Rajasthan",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 280,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 9.00
+            }
+        ]
+    },
+    {
+        "state": "Rajasthan",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 420,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 8.10
+            }
+        ]
+    },
+    {
+        "state": "Uttar Pradesh",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 100,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 150,
+                "rate_per_unit": 5.50
+            },
+            {
+                "min_units": 151,
+                "max_units": 300,
+                "rate_per_unit": 6.00
+            },
+            {
+                "min_units": 301,
+                "max_units": 500,
+                "rate_per_unit": 6.50
+            },
+            {
+                "min_units": 501,
+                "max_units": 99999,
+                "rate_per_unit": 7.00
+            }
+        ]
+    },
+    {
+        "state": "Uttar Pradesh",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 320,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 8.75
+            }
+        ]
+    },
+    {
+        "state": "Uttar Pradesh",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 480,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 7.90
+            }
+        ]
+    },
+    {
+        "state": "Karnataka",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 60,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 30,
+                "rate_per_unit": 3.10
+            },
+            {
+                "min_units": 31,
+                "max_units": 100,
+                "rate_per_unit": 5.55
+            },
+            {
+                "min_units": 101,
+                "max_units": 200,
+                "rate_per_unit": 6.60
+            },
+            {
+                "min_units": 201,
+                "max_units": 99999,
+                "rate_per_unit": 7.10
+            }
+        ]
+    },
+    {
+        "state": "Karnataka",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 200,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 9.20
+            }
+        ]
+    },
+    {
+        "state": "Karnataka",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 380,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 8.00
+            }
+        ]
+    },
+    {
+        "state": "Tamil Nadu",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 50,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 100,
+                "rate_per_unit": 0.00
+            },
+            {
+                "min_units": 101,
+                "max_units": 200,
+                "rate_per_unit": 1.50
+            },
+            {
+                "min_units": 201,
+                "max_units": 500,
+                "rate_per_unit": 3.00
+            },
+            {
+                "min_units": 501,
+                "max_units": 99999,
+                "rate_per_unit": 5.75
+            }
+        ]
+    },
+    {
+        "state": "Tamil Nadu",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 180,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 9.75
+            }
+        ]
+    },
+    {
+        "state": "Tamil Nadu",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 360,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 8.25
+            }
+        ]
+    },
+    {
+        "state": "Delhi",
+        "category": "residential",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 125,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 200,
+                "rate_per_unit": 3.00
+            },
+            {
+                "min_units": 201,
+                "max_units": 400,
+                "rate_per_unit": 4.50
+            },
+            {
+                "min_units": 401,
+                "max_units": 800,
+                "rate_per_unit": 6.50
+            },
+            {
+                "min_units": 801,
+                "max_units": 1200,
+                "rate_per_unit": 7.00
+            },
+            {
+                "min_units": 1201,
+                "max_units": 99999,
+                "rate_per_unit": 8.00
+            }
+        ]
+    },
+    {
+        "state": "Delhi",
+        "category": "commercial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 290,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 9.50
+            }
+        ]
+    },
+    {
+        "state": "Delhi",
+        "category": "industrial",
+        "effective_date": "2024-04-01",
+        "fixed_charge_per_kw": 430,
+        "slabs": [
+            {
+                "min_units": 0,
+                "max_units": 99999,
+                "rate_per_unit": 8.60
+            }
+        ]
+    }
+]
