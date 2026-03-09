@@ -1,0 +1,411 @@
+================================================================================
+  SOLAR SAVINGS CALCULATOR — FRONTEND INTEGRATION PROMPT
+  Backend by: Mfolks Solar  |  Date: 2024  |  Stack: Express.js + PVGIS API
+================================================================================
+
+You are building the frontend for a Solar Savings Calculator that connects to a
+live Express.js backend. Read every section carefully before writing any code.
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 1 — BACKEND BASE URL
+────────────────────────────────────────────────────────────────────────────────
+
+Development:  http://localhost:3001
+Production:   [Replace with your deployed backend URL]
+
+Store this in an environment variable, e.g.:
+  PUBLIC_API_BASE = http://localhost:3001   (Astro)
+  NEXT_PUBLIC_API_BASE = http://localhost:3001  (Next.js)
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 2 — THE ONLY ENDPOINT YOU NEED
+────────────────────────────────────────────────────────────────────────────────
+
+  Method : POST
+  URL    : /api/calculate-solar-savings
+  Headers: Content-Type: application/json
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 3 — REQUEST PAYLOAD (what YOU send to the backend)
+────────────────────────────────────────────────────────────────────────────────
+
+Send a JSON body with exactly these 6 fields:
+
+  {
+    "lat"                 : <number>,   // User's latitude.  Range: -90 to 90
+    "lon"                 : <number>,   // User's longitude. Range: -180 to 180
+    "capacity_kw"         : <number>,   // Desired solar system size in kW. Must be > 0
+    "current_monthly_bill": <number>,   // User's current electricity bill in ₹. Must be > 0
+    "state"               : <string>,   // User's state — MUST match exactly from the list below
+    "category"            : <string>    // One of: "residential", "commercial", "industrial"
+  }
+
+EXAMPLE REQUEST BODY:
+  {
+    "lat": 23.2599,
+    "lon": 77.4126,
+    "capacity_kw": 5,
+    "current_monthly_bill": 3500,
+    "state": "Madhya Pradesh",
+    "category": "residential"
+  }
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 4 — SUCCESS RESPONSE (HTTP 200) — what the backend sends back
+────────────────────────────────────────────────────────────────────────────────
+
+  {
+    "success"                    : true,
+    "monthly_savings_rs"         : 1243.50,  // ₹ saved every month
+    "yearly_savings_rs"          : 14922.00, // ₹ saved every year (monthly × 12)
+    "new_monthly_bill_rs"        : 2256.50,  // New reduced electricity bill in ₹
+    "solar_generation_monthly_kwh": 620.83,  // Avg monthly solar output in kWh
+    "solar_generation_annual_kwh" : 7450.00, // Total annual solar output in kWh
+    "optimal_tilt_angle"         : 23.5,     // Recommended panel tilt angle (degrees)
+    "optimal_azimuth_angle"      : 180.0,    // Recommended panel direction (degrees, 180=South)
+    "current_monthly_units_kwh"  : 312.45,   // Estimated current monthly consumption in kWh
+    "net_monthly_units_kwh"      : 0,        // Grid units still needed after solar (0 if solar covers all)
+    "tariff_state"               : "Madhya Pradesh",
+    "tariff_category"            : "residential"
+  }
+
+FIELD MEANINGS FOR UI DISPLAY:
+  monthly_savings_rs          → "You save ₹X every month"
+  yearly_savings_rs           → "You save ₹X every year"
+  new_monthly_bill_rs         → "Your new bill will be ₹X"
+  solar_generation_monthly_kwh→ "Your system generates X kWh/month"
+  optimal_tilt_angle          → "Install panels at Xdeg tilt"
+  optimal_azimuth_angle       → "Face panels at Xdeg (180=South is ideal for India)"
+  current_monthly_units_kwh   → "You currently use X kWh/month"
+  net_monthly_units_kwh       → If 0, solar fully covers consumption
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 5 — ERROR RESPONSES
+────────────────────────────────────────────────────────────────────────────────
+
+HTTP 400 — Bad Request (missing or invalid field)
+  {
+    "success": false,
+    "error": "Missing required field(s): lat, lon."
+  }
+  → Show an inline form validation error. The "error" string is user-readable.
+
+HTTP 404 — Tariff Not Found (unknown state/category combo)
+  {
+    "success": false,
+    "error": "No tariff found for state=\"XYZ\", category=\"residential\". Available states: ..."
+  }
+  → Show: "We don't have tariff data for your state yet."
+
+HTTP 500 — Server / PVGIS Error
+  {
+    "success": false,
+    "error": "PVGIS API timed out after 15s. Please try again."
+  }
+  → Show a friendly retry message. The PVGIS call can take 2–5 seconds on first load.
+
+ALWAYS check response.success before reading other fields.
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 6 — SUPPORTED STATES & CATEGORIES
+────────────────────────────────────────────────────────────────────────────────
+
+Use EXACTLY these strings in the "state" field (case-insensitive, backend normalises):
+
+  ┌─────────────────────┬─────────────────────────────────────────────────┐
+  │ State               │ Supported Categories                            │
+  ├─────────────────────┼─────────────────────────────────────────────────┤
+  │ Madhya Pradesh      │ residential, commercial, industrial             │
+  │ Maharashtra         │ residential, commercial, industrial             │
+  │ Gujarat             │ residential, commercial, industrial             │
+  │ Rajasthan           │ residential, commercial, industrial             │
+  │ Uttar Pradesh       │ residential, commercial, industrial             │
+  │ Karnataka           │ residential, commercial, industrial             │
+  │ Tamil Nadu          │ residential, commercial, industrial             │
+  │ Delhi               │ residential, commercial, industrial             │
+  └─────────────────────┴─────────────────────────────────────────────────┘
+
+Populate your state dropdown with this array (copy-paste ready):
+
+  const SUPPORTED_STATES = [
+    "Madhya Pradesh",
+    "Maharashtra",
+    "Gujarat",
+    "Rajasthan",
+    "Uttar Pradesh",
+    "Karnataka",
+    "Tamil Nadu",
+    "Delhi"
+  ];
+
+  const SUPPORTED_CATEGORIES = [
+    { value: "residential", label: "Residential (Home)" },
+    { value: "commercial",  label: "Commercial (Office/Shop)" },
+    { value: "industrial",  label: "Industrial (Factory/Plant)" }
+  ];
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 7 — TARIFF REFERENCE (for display/transparency — already applied server-side)
+────────────────────────────────────────────────────────────────────────────────
+You do NOT need to do any tariff math. The backend handles all of it.
+This section is only for displaying "How is this calculated?" tooltips/modals.
+
+MADHYA PRADESH — Residential
+  Fixed charge: ₹150/kW/month (on assumed 5kW load = ₹750/month)
+  Slabs:
+    0–150 units  → ₹5.05/unit
+    151–300 units → ₹5.80/unit
+    301+ units   → ₹6.70/unit
+
+MADHYA PRADESH — Commercial
+  Fixed charge: ₹300/kW/month (₹1500/month)
+  Slabs:
+    0–500 units  → ₹7.50/unit
+    501+ units   → ₹8.50/unit
+
+MADHYA PRADESH — Industrial
+  Fixed charge: ₹400/kW/month (₹2000/month)
+  Slabs: Flat ₹6.90/unit
+
+MAHARASHTRA — Residential
+  Fixed charge: ₹130/kW/month (₹650/month)
+  Slabs:
+    0–100 units  → ₹3.46/unit
+    101–300 units → ₹7.04/unit
+    301–500 units → ₹10.27/unit
+    501+ units   → ₹11.47/unit
+
+MAHARASHTRA — Commercial
+  Fixed charge: ₹350/kW/month | Flat ₹10.90/unit
+
+MAHARASHTRA — Industrial
+  Fixed charge: ₹500/kW/month | Flat ₹9.80/unit
+
+GUJARAT — Residential
+  Fixed charge: ₹80/kW/month (₹400/month)
+  Slabs:
+    0–50 units   → ₹1.95/unit
+    51–250 units  → ₹3.75/unit
+    251–500 units → ₹5.25/unit
+    501+ units   → ₹6.00/unit
+
+GUJARAT — Commercial
+  Fixed charge: ₹250/kW/month | Flat ₹8.25/unit
+
+GUJARAT — Industrial
+  Fixed charge: ₹450/kW/month | Flat ₹7.60/unit
+
+RAJASTHAN — Residential
+  Fixed charge: ₹90/kW/month (₹450/month)
+  Slabs:
+    0–100 units  → ₹4.75/unit
+    101–150 units → ₹5.25/unit
+    151–300 units → ₹6.00/unit
+    301–500 units → ₹6.50/unit
+    501+ units   → ₹7.25/unit
+
+RAJASTHAN — Commercial
+  Fixed charge: ₹280/kW/month | Flat ₹9.00/unit
+
+RAJASTHAN — Industrial
+  Fixed charge: ₹420/kW/month | Flat ₹8.10/unit
+
+UTTAR PRADESH — Residential
+  Fixed charge: ₹100/kW/month (₹500/month)
+  Slabs:
+    0–150 units  → ₹5.50/unit
+    151–300 units → ₹6.00/unit
+    301–500 units → ₹6.50/unit
+    501+ units   → ₹7.00/unit
+
+UTTAR PRADESH — Commercial
+  Fixed charge: ₹320/kW/month | Flat ₹8.75/unit
+
+UTTAR PRADESH — Industrial
+  Fixed charge: ₹480/kW/month | Flat ₹7.90/unit
+
+KARNATAKA — Residential
+  Fixed charge: ₹60/kW/month (₹300/month)
+  Slabs:
+    0–30 units   → ₹3.10/unit
+    31–100 units  → ₹5.55/unit
+    101–200 units → ₹6.60/unit
+    201+ units   → ₹7.10/unit
+
+KARNATAKA — Commercial
+  Fixed charge: ₹200/kW/month | Flat ₹9.20/unit
+
+KARNATAKA — Industrial
+  Fixed charge: ₹380/kW/month | Flat ₹8.00/unit
+
+TAMIL NADU — Residential
+  Fixed charge: ₹50/kW/month (₹250/month)
+  Slabs:
+    0–100 units  → FREE (₹0.00/unit)
+    101–200 units → ₹1.50/unit
+    201–500 units → ₹3.00/unit
+    501+ units   → ₹5.75/unit
+
+TAMIL NADU — Commercial
+  Fixed charge: ₹180/kW/month | Flat ₹9.75/unit
+
+TAMIL NADU — Industrial
+  Fixed charge: ₹360/kW/month | Flat ₹8.25/unit
+
+DELHI — Residential
+  Fixed charge: ₹125/kW/month (₹625/month)
+  Slabs:
+    0–200 units   → ₹3.00/unit
+    201–400 units  → ₹4.50/unit
+    401–800 units  → ₹6.50/unit
+    801–1200 units → ₹7.00/unit
+    1201+ units   → ₹8.00/unit
+
+DELHI — Commercial
+  Fixed charge: ₹290/kW/month | Flat ₹9.50/unit
+
+DELHI — Industrial
+  Fixed charge: ₹430/kW/month | Flat ₹8.60/unit
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 8 — COMPLETE FETCH EXAMPLE (JavaScript / Astro / React)
+────────────────────────────────────────────────────────────────────────────────
+
+  async function calculateSolarSavings(formData) {
+    const API_BASE = import.meta.env.PUBLIC_API_BASE || 'http://localhost:3001';
+
+    try {
+      const response = await fetch(`${API_BASE}/api/calculate-solar-savings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          lat:                  formData.lat,
+          lon:                  formData.lon,
+          capacity_kw:          formData.capacityKw,
+          current_monthly_bill: formData.monthlyBill,
+          state:                formData.state,
+          category:             formData.category,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!data.success) {
+        // Handle known errors
+        if (response.status === 400) throw new Error(`Validation: ${data.error}`);
+        if (response.status === 404) throw new Error(`State not supported: ${data.error}`);
+        throw new Error(data.error || 'Something went wrong. Please try again.');
+      }
+
+      return data; // All fields from Section 4 are available here
+
+    } catch (err) {
+      console.error('Solar API error:', err.message);
+      throw err; // Re-throw so the UI can display it
+    }
+  }
+
+  // Usage:
+  const result = await calculateSolarSavings({
+    lat: 23.2599,
+    lon: 77.4126,
+    capacityKw: 5,
+    monthlyBill: 3500,
+    state: 'Madhya Pradesh',
+    category: 'residential',
+  });
+
+  console.log(`Monthly savings: ₹${result.monthly_savings_rs}`);
+  console.log(`Yearly savings:  ₹${result.yearly_savings_rs}`);
+  console.log(`New bill:        ₹${result.new_monthly_bill_rs}`);
+  console.log(`Solar generates: ${result.solar_generation_monthly_kwh} kWh/month`);
+  console.log(`Optimal tilt:    ${result.optimal_tilt_angle}°`);
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 9 — GETTING THE USER'S LOCATION (for lat/lon)
+────────────────────────────────────────────────────────────────────────────────
+
+Option A — Browser Geolocation API (best UX):
+
+  function getUserLocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error('Geolocation not supported by your browser.'));
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => resolve({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
+        (err) => reject(new Error('Could not get location. Please enter manually.'))
+      );
+    });
+  }
+
+Option B — Manual input:
+  Show two number inputs:
+    Latitude  (placeholder: "e.g. 23.25", min: -90,  max: 90)
+    Longitude (placeholder: "e.g. 77.41", min: -180, max: 180)
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 10 — RECOMMENDED UI FORM FIELDS
+────────────────────────────────────────────────────────────────────────────────
+
+  Step 1 — Location
+    [📍 Use My Location] button  OR  Latitude + Longitude text inputs
+
+  Step 2 — Electricity Details
+    State          : dropdown (use SUPPORTED_STATES array from Section 6)
+    Category       : dropdown (Residential / Commercial / Industrial)
+    Monthly Bill   : number input in ₹ (placeholder: "e.g. 3500")
+
+  Step 3 — Solar System
+    System Size (kW): number input (placeholder: "e.g. 5", min: 1, max: 500)
+
+  [Calculate Savings] button → calls the API
+
+  Results Panel (show after API responds):
+    💰 Monthly Savings:       ₹{monthly_savings_rs}
+    📅 Yearly Savings:        ₹{yearly_savings_rs}
+    🔌 New Monthly Bill:      ₹{new_monthly_bill_rs}
+    ☀️ Solar Generation:      {solar_generation_monthly_kwh} kWh/month
+    📐 Recommended Tilt:      {optimal_tilt_angle}°
+    🧭 Panel Direction:       {optimal_azimuth_angle}° (180° = South, ideal for India)
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 11 — LOADING & UX NOTES
+────────────────────────────────────────────────────────────────────────────────
+
+  • The API makes a real HTTP call to PVGIS (EU solar database). It takes 2–8s.
+  • Show a loading spinner/skeleton immediately on button click.
+  • The PVGIS call can occasionally time out (rare). Show a "Try again" button.
+  • Disable the submit button while loading to prevent duplicate requests.
+  • Debounce/throttle is NOT needed — this is a button-triggered one-shot call.
+
+
+────────────────────────────────────────────────────────────────────────────────
+SECTION 12 — HEALTH CHECK (for debugging / deployment checks)
+────────────────────────────────────────────────────────────────────────────────
+
+  GET http://localhost:3001/health
+
+  Response:
+  {
+    "status": "ok",
+    "timestamp": "2024-02-27T10:41:00.000Z",
+    "env": "development"
+  }
+
+  Use this to verify the backend is reachable before making the main API call.
+
+================================================================================
+END OF PROMPT
+================================================================================

@@ -72,7 +72,7 @@ router.post('/', validateSavingsInput, async (req, res) => {
     );
 
     // ── Step 6: Return response ────────────────────────────────────────────────
-    return res.status(200).json({
+    const responseData = {
       success: true,
 
       // Financial summary
@@ -93,7 +93,11 @@ router.post('/', validateSavingsInput, async (req, res) => {
       net_monthly_units_kwh:     parseFloat(netMonthlyUnits.toFixed(2)),
       tariff_state:    tariff.state,
       tariff_category: tariff.category,
-    });
+    };
+
+    console.log('[savings] Final JSON response payload:', responseData);
+
+    return res.status(200).json(responseData);
   } catch (err) {
     console.error('[savings] Unhandled error:', err.message);
     return res.status(500).json({

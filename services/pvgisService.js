@@ -41,7 +41,7 @@ async function fetchPVGISData(lat, lon, capacityKw) {
     lon,
     peakpower: capacityKw,
     loss: SYSTEM_LOSS_PERCENT,
-    optimumangles: 1,       // Let PVGIS compute the optimal tilt & azimuth
+    optimalangles: 1,       // Let PVGIS compute the optimal tilt & azimuth
     outputformat: 'json',
   };
 
